@@ -38,7 +38,7 @@ def check(root: Path):
         errors.append(f"TOC versions disagree: {sorted(versions)}")
     version = next(iter(versions)) if len(versions) == 1 else None
     changelog = root / "CHANGELOG.md"
-    if version and changelog.exists() and not re.search(r"(?m)^#{1,4}\s*(?:\\[)?(?:v)?"+re.escape(version)+r"\b", changelog.read_text(encoding="utf-8")):
+    if version and changelog.exists() and not re.search(r"(?m)^#{1,4}\\s*\\[?v?" + re.escape(version) + r"\\b", changelog.read_text(encoding="utf-8")):
         errors.append(f"CHANGELOG.md has no heading for version {version}")
     readme = root / "README.md"
     if version and readme.exists():
@@ -58,7 +58,7 @@ def check(root: Path):
     else:
         raw = pkgmeta.read_text(encoding="utf-8")
         m = re.search(r"(?ms)^ignore:\s*\n((?:[ \t]+-.*\n|[ \t]*\n)*)", raw+"\n")
-        ignored = {line.strip().lstrip("-").strip().strip("\\\"\u0027") for line in m.group(1).splitlines() if line.strip().startswith("-")} if m else set()
+        ignored = {line.strip().lstrip("-").strip().strip(chr(34) + chr(39)) for line in m.group(1).splitlines() if line.strip().startswith("-")} if m else set()
         ignored = {s.strip().rstrip("/") for s in ignored}
         present = {p.name for p in root.iterdir() if p.name in EXCLUDED}
         missing = sorted(present - ignored - {".git"})
