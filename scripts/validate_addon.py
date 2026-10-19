@@ -38,7 +38,7 @@ def check(root: Path):
         errors.append(f"TOC versions disagree: {sorted(versions)}")
     version = next(iter(versions)) if len(versions) == 1 else None
     changelog = root / "CHANGELOG.md"
-    if version and changelog.exists() and not re.search(r"(?m)^#{1,4}\\s*\\[?v?" + re.escape(version) + r"\\b", changelog.read_text(encoding="utf-8")):
+    if version and changelog.exists() and not re.search(r"(?m)^#{1,4}\s*\[?v?" + re.escape(version) + r"\b", changelog.read_text(encoding="utf-8")):
         errors.append(f"CHANGELOG.md has no heading for version {version}")
     readme = root / "README.md"
     if version and readme.exists():
