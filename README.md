@@ -23,8 +23,8 @@ StormCore provides AI guidance, development and compatibility conventions, and r
 
 ## Automation
 
-The reusable GitHub Actions workflow at .github/workflows/validate-addon.yml checks Lua 5.1 syntax and TOC references. Packaging exclusions and artifact inspection are documented standards but are **not yet automatically enforced** by this workflow.
+The reusable GitHub Actions workflow at .github/workflows/validate-addon.yml checks Lua 5.1 syntax, TOC references, release metadata, and source-level packaging policy. It also runs StyLua and Luacheck in advisory mode by default; callers can opt into strict enforcement after reviewing their baseline. It does **not** inspect the actual BigWigs/CurseForge release ZIP yet, and it never automatically reformats addon code.
 
 ## Pilots
 
-PetXPBarPlus has a validation integration on its stormcore-validation-pilot branch. A subsequent read-only VendorPricePlus audit informed the protected-value, integration, documentation, and packaging standards. StormCore changes do not automatically alter either addon.
+PetXPBarPlus has a validation integration on its stormcore-validation-pilot branch. A VendorPricePlus audit informed the protected-value, integration, documentation, and packaging standards. VendorPricePlus now has a separate stormcore-ci-trial branch with a caller workflow; no runtime addon files were changed.
