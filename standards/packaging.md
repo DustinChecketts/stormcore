@@ -1,19 +1,37 @@
 # Packaging and publishing
 
 ## Goal
-Developer files belong in GitHub, not in player-installable ZIPs. StormCore itself is never packaged as an addon.
+Developer files stay on GitHub; only installable addon files belong in player ZIPs. StormCore itself never ships as a WoW addon.
 
-## Exclude from addon ZIPs
-- AGENTS.md, ARCHITECTURE.md, development standards and internal notes
-- .github/, CI scripts, test fixtures, .gitignore and .gitattributes
-- README and CHANGELOG unless the maintainer deliberately chooses to ship them
+## Expected contents
+- Include the TOC, runtime Lua/XML, required textures/assets, localization, and required libraries.
+- Exclude AGENTS.md, ARCHITECTURE.md, standards/, internal development notes, tests/fixtures, .github/, CI scripts, and git metadata/configuration.
+- README.md and CHANGELOG.md are optional in the ZIP at maintainer discretion; CHANGELOG.md may still be read by the release tool to generate release notes.
 
-## Include
-- The addon TOC, runtime Lua and assets, and any required libraries or localization files.
+## BigWigs/CurseForge packager
+- Each addon should explicitly maintain its own .pkgmeta ignore list for development-only files. A recommended starting point is below; adapt it to actual paths and the packager's documented behavior.
+- Do not assume .gitignore or GitHub Actions exclusions control release ZIP contents.
+- Check that manual-changelog references still work when CHANGELOG.md is excluded from the packaged payload.
+- Prefer a tested explicit allowlist when the packager supports it; otherwise use a maintained exclusion list.
 
-## Implementation
-- Prefer an explicit package file allowlist when the packager supports it.
-- With BigWigs/CurseForge packager, use .pkgmeta ignore entries as appropriate; confirm its exact behavior before changing a live workflow.
-- Inspect the produced ZIP before publishing; verify it installs correctly and contains no developer-only files.
-- Do not modify existing release automation until the maintainer approves a tested replacement.
-- Never expose publishing tokens in repository files; use GitHub Actions secrets.
+Example .pkgmeta fragment (adapt before use):
+
+```yaml
+ignore:
+  - .github
+  - .gitignore
+  - .gitattributes
+  - AGENTS.md
+  - ARCHITECTURE.md
+  - standards
+  - Tests
+  - tests
+  - scripts
+```
+
+## Release gate
+- Inspect the built ZIP's contents, not just the source tree; fail the release validation if development-only paths are present.
+- Verify the TOC and all referenced runtime files are present and that the ZIP installs in the expected addon directory.
+- Validate the artifact before upload where supported. If the release action publishes immediately, use a separate dry-run or staged package inspection first.
+- Keep secrets in GitHub Actions secrets, never in repository files.
+- Do not change existing publishing automation without a tested plan and maintainer approval.
