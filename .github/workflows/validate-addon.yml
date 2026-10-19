@@ -20,7 +20,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: DustinChecketts/StormCore
-          ref: main
+          # Pilot: use the same StormCore branch as the reusable workflow.
+          # Replace with a reviewed immutable commit when stabilized.
+          ref: feature/addon-local-quality-config
           path: .stormcore
 
       - name: Install Lua 5.1 and LuaRocks
