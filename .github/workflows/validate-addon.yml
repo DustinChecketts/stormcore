@@ -47,6 +47,13 @@ jobs:
       - name: Build and inspect non-publishing ZIP preview
         run: python3 .stormcore/scripts/preview_package.py .
 
+      - name: Upload ZIP preview for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: stormcore-package-preview
+          path: /tmp/stormcore-package-preview.zip
+          retention-days: 3
+
       - name: Static analysis (advisory until baseline is reviewed)
         continue-on-error: ${{ !inputs.strict }}
         run: |
