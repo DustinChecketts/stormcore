@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out addon source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Check out StormCore checks
         uses: actions/checkout@v4
@@ -57,7 +57,14 @@ jobs:
       - name: Static analysis (advisory until baseline is reviewed)
         continue-on-error: ${{ !inputs.strict }}
         run: |
-          find . -name '*.lua' -type f -not -path './.stormcore/*' -print0 | xargs -0 -r luacheck --codes --no-color --no-max-line-length
+          if [ -f .github/luacheckrc ]; then
+            config=(--config .github/luacheckrc)
+          elif [ -f .luacheckrc ]; then
+            config=(--config .luacheckrc)
+          else
+            config=()
+          fi
+          find . -name '*.lua' -type f -not -path './.stormcore/*' -print0 | xargs -0 -r luacheck "${config[@]}" --codes --no-color --no-max-line-length
 
       - name: Install StyLua
         run: |
@@ -66,7 +73,14 @@ jobs:
       - name: Formatting check (advisory until baseline is reviewed)
         continue-on-error: ${{ !inputs.strict }}
         run: |
-          find . -name '*.lua' -type f -not -path './.stormcore/*' -print0 | xargs -0 -r stylua --check --syntax Lua51
+          if [ -f stylua.toml ]; then
+            config=(--config-path stylua.toml)
+          elif [ -f .stylua.toml ]; then
+            config=(--config-path .stylua.toml)
+          else
+            config=(--syntax Lua51)
+          fi
+          find . -name '*.lua' -type f -not -path './.stormcore/*' -print0 | xargs -0 -r stylua --check "${config[@]}"
 
       - name: Strict metadata and packaging policy
         if: inputs.strict
