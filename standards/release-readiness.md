@@ -39,3 +39,12 @@ The checklist is a decision aid, not a requirement for 100% test coverage.
 - Before publishing, verify that the intended branch/ref exists and identify its exact commit SHA. Do not infer that a conversational branch name exists on GitHub.
 - Ensure the packaged artifact and release tag derive from the approved commit, and that the TOC and release notes agree on the version.
 - If the source ref cannot be verified, stop before publishing and ask for the correct ref.
+
+## Engineering gates versus manual testing
+
+- Mandatory automated engineering gates (when implemented): consistent Lua formatting, Lua 5.1 parsing, TOC references, static checks with reviewed exceptions, version/documentation consistency, and artifact-content validation. A documented standard is not proof that automation is already enforced.
+- Manual testing is representative and risk-based, not an exhaustive cross-product of clients, settings, tooltip contexts, and third-party addons. Prioritize changed paths, high-impact regressions, secure/secret-sensitive behavior, and a few common combinations.
+- Maintain a concise test matrix with tested, not tested, and known failing scenarios. Do not turn a maintainer's finite testing time into an arbitrary percentage-coverage gate.
+- User-reported issues are a normal part of the feedback loop. Triage and reproduce reports, fix on a branch, and add an automated or focused manual regression case when feasible.
+- Reliability goals such as 'works for 98% of users' are aspirations, not measured claims without supporting telemetry.
+- Do not weaken formatting, static analysis, syntax, packaging, or release-integrity requirements merely because manual coverage is incomplete.
