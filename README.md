@@ -2,19 +2,29 @@
 
 Shared development standards for independently installable World of Warcraft addons maintained by StormtrooperTK421.
 
-StormCore contains development guidance and, eventually, reusable GitHub validation and release workflows. It is **not** a WoW addon, ships no runtime Lua, and is never installed by players.
+StormCore provides AI guidance, development and compatibility conventions, and reusable validation. It is **not** a WoW addon, contains no shared runtime Lua, and is never installed by players.
 
 ## Principles
 
-- Prefer Blizzard's native UI and APIs; extend rather than replace them where practical.
-- Prioritize WoW Forever, then Classic Anniversary and Classic Era; preserve tested behavior on every supported client.
-- Keep addons independent, lightweight, readable, and straightforward to maintain.
-- Prefer capability checks over assumptions based on client family.
-- Work on dedicated development branches; do not merge, tag, or publish addon releases without the maintainer's approval.
+- Prefer Blizzard's native UI and APIs; extend rather than replace where practical.
+- Prioritize WoW Forever, then Classic Anniversary and Classic Era, without regressing supported clients.
+- Keep addons standalone, lightweight, and easy to maintain.
+- Prefer verified API capabilities over client-family assumptions; handle secret values defensively.
+- Develop on dedicated branches. Do not merge, tag, or publish without maintainer approval.
 - Keep developer-only files out of distributed addon ZIPs.
 
-See AGENTS.md for AI collaboration rules and standards/ for compatibility, development, and packaging guidance.
+## Standards
 
-## Pilot
+- [AI development instructions](AGENTS.md)
+- [Development conventions](standards/development.md)
+- [Client compatibility and protected values](standards/compatibility.md)
+- [Packaging and publishing](standards/packaging.md)
+- [Release readiness checklist](standards/release-readiness.md)
 
-PetXPBarPlus is the initial pilot. StormCore's first phase documents conventions; it does not alter PetXPBarPlus or its publishing workflow.
+## Automation
+
+The reusable GitHub Actions workflow at .github/workflows/validate-addon.yml checks Lua 5.1 syntax and TOC references. Packaging exclusions and artifact inspection are documented standards but are **not yet automatically enforced** by this workflow.
+
+## Pilots
+
+PetXPBarPlus has a validation integration on its stormcore-validation-pilot branch. A subsequent read-only VendorPricePlus audit informed the protected-value, integration, documentation, and packaging standards. StormCore changes do not automatically alter either addon.
