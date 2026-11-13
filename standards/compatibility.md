@@ -5,6 +5,7 @@ Priority: (1) WoW Forever, (2) Classic Anniversary, (3) Classic Era including Ha
 - Preserve previously supported clients; distinguish tested, expected, and unsupported compatibility in release notes.
 - Prefer capability checks over assumptions based on WOW_PROJECT_ID. WoW Forever must not be treated as Retail even when it reports WOW_PROJECT_MAINLINE.
 - Keep client-specific presentation isolated where practical; document confirmed API findings and recheck after patches.
+- Consult [Forever API and compatibility change log](forever-api-change-log.md) before implementing sensitive Forever API integrations; distinguish historical reports from current-build verification.
 
 ## Protected and secret values (especially Forever)
 - Values originating from secure actions, tooltip data, frame owners, counts, or protected APIs may be secret. Do not assume values are readable merely because a function returned them.
