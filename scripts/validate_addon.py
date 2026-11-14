@@ -5,6 +5,8 @@ import re
 import sys
 from pathlib import Path
 
+BIGWIGS_VERSION_PLACEHOLDER = "@project-version@"
+
 EXCLUDED = {".github", ".git", "AGENTS.md", "ARCHITECTURE.md", "tests", "Tests", "scripts", "standards", ".gitignore", ".gitattributes"}
 
 def check(root: Path):
@@ -37,11 +39,13 @@ def check(root: Path):
     if len(versions) > 1:
         errors.append(f"TOC versions disagree: {sorted(versions)}")
     version = next(iter(versions)) if len(versions) == 1 else None
+    # BigWigs replaces this token from the release tag at packaging time.
+    # The source checkout cannot know its final release version.
     changelog = root / "CHANGELOG.md"
-    if version and changelog.exists() and not re.search(r"(?m)^#{1,4}\s*\[?v?" + re.escape(version) + r"\b", changelog.read_text(encoding="utf-8")):
+    if version and version != BIGWIGS_VERSION_PLACEHOLDER and changelog.exists() and not re.search(r"(?m)^#{1,4}\s*\[?v?" + re.escape(version) + r"\b", changelog.read_text(encoding="utf-8")):
         errors.append(f"CHANGELOG.md has no heading for version {version}")
     readme = root / "README.md"
-    if version and readme.exists():
+    if version and version != BIGWIGS_VERSION_PLACEHOLDER and readme.exists():
         text = readme.read_text(encoding="utf-8")
         mentions = re.findall(r"(?i)\bversion\s+(\d+\.\d+\.\d+)\b", text)
         if mentions and any(v != version for v in mentions):
