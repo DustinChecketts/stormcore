@@ -35,3 +35,12 @@ ignore:
 - Validate the artifact before upload where supported. If the release action publishes immediately, use a separate dry-run or staged package inspection first.
 - Keep secrets in GitHub Actions secrets, never in repository files.
 - Do not change existing publishing automation without a tested plan and maintainer approval.
+
+## CurseForge release file naming
+
+- Use `AddonName-Version.zip` for the distributable archive and `AddonName-Version` for the CurseForge file display name, for example `WideQuestLogPlus-1.2.1.zip` and `WideQuestLogPlus-1.2.1`.
+- Keep Git tags in the existing `vMAJOR.MINOR.PATCH` format. Strip the leading `v` when constructing filenames and labels.
+- BigWigs uses separate defaults for the archive filename and the upload label. Its `-n` argument accepts `filename-template:upload-label-template`; setting only the filename template does **not** rename the CurseForge entry.
+- In each addon release workflow, derive the normalized version from the manually supplied release version or the tag name, then pass `-n "AddonName-Version:AddonName-Version"` to the pinned BigWigs packager. Use the addon's `.pkgmeta` `package-as` value or TOC basename as the canonical addon name.
+- Do not rename the addon folder inside the ZIP or change the TOC filename to include a version. Verify the uploaded label and actual ZIP name on the next release.
+- StormCore's `preview_package.py` is a validation preview, not the publishing tool; changing its output filename alone cannot change CurseForge file labels.
